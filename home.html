@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeDB - Gerenciador de Projetos</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="home.css">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-10">
+            <div class="flex items-center">
+                <div class="bg-red-600 p-2 rounded-full mr-3">
+                    <i class="fas fa-database text-white"></i>
+                </div>
+                <h1 class="text-3xl font-bold">Anime<span class="text-red-600">DB</span></h1>
+            </div>
+            <button id="newProjectBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i> Novo Projeto
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Projects Section -->
+            <section id="projectsSection">
+                <h2 class="text-2xl font-bold mb-6">Meus Projetos</h2>
+                <div id="projectsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Projetos serão carregados aqui -->
+                </div>
+            </section>
+
+            <!-- Create Project Modal -->
+            <div id="projectModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">Criar Novo Projeto</h3>
+                        <button id="closeModalBtn" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Passo 1: Informações do Projeto -->
+                        <div id="step1" class="step-content">
+                            <div>
+                                <label for="projectName" class="block mb-2">Nome do Projeto</label>
+                                <input type="text" id="projectName" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 focus:ring-2 focus:ring-red-500">
+                            </div>
+                            <div class="mt-4">
+                                <label for="projectDescription" class="block mb-2">Descrição</label>
+                                <textarea id="projectDescription" rows="3" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 focus:ring-2 focus:ring-red-500"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Passo 2: Configuração do GitHub -->
+                        <div id="step2" class="step-content hidden">
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-400 mb-2">Insira seu token de acesso pessoal do GitHub:</p>
+                                <input type="password" id="githubToken" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 font-mono text-sm focus:ring-2 focus:ring-red-500" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+                                
+                                <div class="mt-4 text-xs text-gray-400">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    O token precisa ter permissão para criar repositórios. 
+                                    <a href="https://github.com/settings/tokens/new" target="_blank" class="text-red-400 hover:underline">Gerar token</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Passo 3: Confirmação -->
+                        <div id="step3" class="step-content hidden">
+                            <div class="bg-gray-700 p-4 rounded-lg">
+                                <h4 class="font-bold flex items-center">
+                                    <i class="fas fa-shield-alt text-red-500 mr-2"></i>
+                                    Termos de Serviço
+                                </h4>
+                                <div class="text-sm text-gray-300 mt-2 max-h-40 overflow-y-auto">
+                                    <p class="mb-2">Ao utilizar o AnimeDB, você concorda com:</p>
+                                    <ol class="list-decimal pl-5 space-y-1">
+                                        <li>Responsabilidade sobre os dados armazenados</li>
+                                        <li>Configuração adequada do GitHub</li>
+                                        <li>Não nos responsabilizamos por perda de dados</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center">
+                                <input type="checkbox" id="agreeTerms" class="mr-2">
+                                <label for="agreeTerms">Eu li e concordo com os Termos de Serviço</label>
+                            </div>
+                        </div>
+
+                        <!-- Navegação -->
+                        <div class="flex justify-between pt-4 border-t border-gray-700">
+                            <button id="prevStepBtn" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md hidden">
+                                <i class="fas fa-arrow-left mr-2"></i> Voltar
+                            </button>
+                            <button id="nextStepBtn" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-md ml-auto">
+                                Próximo <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                            <button id="createBtn" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-md hidden">
+                                <i class="fas fa-check mr-2"></i> Criar Projeto
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Detalhes do Projeto -->
+            <div id="detailsModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+                <div class="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold" id="projectTitle"></h3>
+                        <button id="closeDetailsBtn" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <p class="text-gray-300" id="projectDesc"></p>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <p class="text-sm text-gray-400">Criado em:</p>
+                                <p class="font-medium" id="projectCreated"></p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-400">Última modificação:</p>
+                                <p class="font-medium" id="projectModified"></p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-sm text-gray-400">Repositório GitHub:</p>
+                                <p class="font-medium text-red-400" id="projectRepo"></p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700">
+                            <button id="deleteProjectBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md mr-2">
+                                <i class="fas fa-trash mr-2"></i> Excluir
+                            </button>
+                            <button id="editProjectBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md">
+                                <i class="fas fa-edit mr-2"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>

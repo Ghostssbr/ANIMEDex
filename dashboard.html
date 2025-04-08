@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeDB Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn fixed top-4 left-4 z-50 md:hidden bg-gray-900 p-2 rounded-md text-white" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="h-full flex flex-col">
+            <!-- Logo -->
+            <div class="p-4 flex items-center justify-between border-b border-gray-800">
+                <div class="flex items-center">
+                    <div class="rounded-full bg-red-600 p-2 mr-3">
+                        <i class="fas fa-database text-white text-sm"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-white">Anime<span class="text-red-600">DB</span></h1>
+                </div>
+                <button id="toggleSidebar" class="text-gray-400 hover:text-white hidden md:block">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="py-4 flex-1 overflow-y-auto">
+                <ul>
+                    <li><a href="#" class="nav-item active text-white"><i class="fas fa-home w-6"></i><span class="ml-2">Dashboard</span></a></li>
+                    <li><a href="#" class="nav-item text-gray-400 hover:text-white"><i class="fas fa-list w-6"></i><span class="ml-2">Coleções</span></a></li>
+                    <li><a href="#" class="nav-item text-gray-400 hover:text-white"><i class="fas fa-chart-pie w-6"></i><span class="ml-2">Estatísticas</span></a></li>
+                </ul>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="border-t border-gray-800 p-4">
+                <div class="flex items-center">
+                    <img src="https://i.imgur.com/cgV2Ymi.jpeg" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium">Otaku Master</p>
+                        <p class="text-xs text-gray-500">Plano Gratuito</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="text-center">
+            <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <p class="mt-3">Conectando ao Firebase...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="bg-gray-900 bg-opacity-90 py-4 px-4 md:px-8 border-b border-gray-800">
+            <div class="flex justify-between items-center">
+                <h2 class="text-lg md:text-xl font-bold">Projeto: <span class="text-red-500" id="projectNameDisplay">Naruto Database</span></h2>
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <button class="p-2 text-gray-400 hover:text-white relative">
+                        <i class="fas fa-bell"></i>
+                        <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                    </button>
+                    <img src="https://i.imgur.com/cgV2Ymi.jpeg" alt="Profile" class="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover cursor-pointer">
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Content -->
+        <div class="p-4 md:p-8">
+            <!-- Anime List -->
+            <!-- Substitua esta parte no dashboard.html -->
+          <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <h3 class="text-xl md:text-2xl font-bold">Lista de Animes</h3>
+              <div class="flex flex-col md:flex-row w-full md:w-auto gap-3">
+                  <div class="search-container">
+                      <input type="text" placeholder="Buscar anime..." class="search-input">
+                      <i class="fas fa-search search-icon"></i>
+                  </div>
+                  
+              </div>
+          </div>
+
+            <!-- Anime Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <!-- Anime Card 1 -->
+                <div class="dashboard-card" data-anime-id="naruto">
+                    <div class="h-40 bg-gray-700 relative">
+                        <img src="https://i.imgur.com/qr6cR7p.jpeg" alt="Naruto" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-gray-900 bg-opacity-70 px-2 py-1 rounded text-xs">
+                            <span>TV</span> • <span>220 Eps</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg line-clamp-1">Naruto Shippuden</h4>
+                            <div class="flex items-center bg-gray-800 rounded-lg px-2 py-1">
+                                <i class="fas fa-star text-yellow-500 mr-1 text-sm"></i>
+                                <span class="text-sm">9.2</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-400 mb-3">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            <span>Completo</span>
+                            <span class="mx-2">•</span>
+                            <span class="line-clamp-1">Ação, Aventura</span>
+                        </div>
+                        <p class="text-gray-400 text-sm line-clamp-2 mb-4">Naruto Uzumaki, é um jovem ninja que constantemente procura por reconhecimento e sonha em se tornar Hokage, o ninja líder de sua vila.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="text-red-500 hover:text-red-400 text-sm font-medium">Ver detalhes</button>
+                            <div class="text-gray-500 text-xs">21/06/2023</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anime Card 2 -->
+                <div class="dashboard-card" data-anime-id="demon-slayer">
+                    <div class="h-40 bg-gray-700 relative">
+                        <img src="https://i.imgur.com/J5m9X7t.jpeg" alt="Demon Slayer" class="w-full h-full object-cover">
+                        <div class="absolute top-2 right-2 bg-gray-900 bg-opacity-70 px-2 py-1 rounded text-xs">
+                            <span>TV</span> • <span>26 Eps</span>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg line-clamp-1">Demon Slayer</h4>
+                            <div class="flex items-center bg-gray-800 rounded-lg px-2 py-1">
+                                <i class="fas fa-star text-yellow-500 mr-1 text-sm"></i>
+                                <span class="text-sm">8.7</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-400 mb-3">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            <span>Completo</span>
+                            <span class="mx-2">•</span>
+                            <span class="line-clamp-1">Ação, Fantasia</span>
+                        </div>
+                        <p class="text-gray-400 text-sm line-clamp-2 mb-4">Tanjiro Kamado luta para se tornar um caçador de demônios depois que sua família é massacrada e sua irmã é transformada em um demônio.</p>
+                        <div class="flex justify-between items-center">
+                            <button class="text-red-500 hover:text-red-400 text-sm font-medium">Ver detalhes</button>
+                            <div class="text-gray-500 text-xs">06/04/2019</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Anime Details Modal -->
+<div id="animeModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-gray-800 rounded-lg max-w-md w-full overflow-hidden">
+        <!-- Close Button -->
+        <button id="closeAnimeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        
+        <!-- Anime Cover -->
+        <div class="h-40 bg-gray-700 relative">
+            <img id="animeCover" src="" alt="" class="w-full h-full object-cover">
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900 to-transparent p-3">
+                <h3 id="animeTitle" class="text-lg font-bold"></h3>
+            </div>
+        </div>
+        
+        <!-- Anime Details -->
+        <div class="p-4">
+            <!-- Basic Info -->
+            <div class="flex justify-between items-center mb-3">
+                <div class="flex items-center space-x-2">
+                    <span id="animeType" class="bg-gray-700 px-2 py-1 rounded text-xs"></span>
+                    <span id="animeEpisodes" class="bg-gray-700 px-2 py-1 rounded text-xs"></span>
+                    <span id="animeRating" class="flex items-center text-yellow-500">
+                        <i class="fas fa-star mr-1"></i>
+                        <span></span>
+                    </span>
+                </div>
+                <span id="animeStatus" class="flex items-center text-xs">
+                    <span id="statusDot" class="w-2 h-2 rounded-full mr-1"></span>
+                    <span id="statusText"></span>
+                </span>
+            </div>
+            
+            <!-- Synopsis (Limited) -->
+            <div class="mb-4">
+                <p id="animeSynopsis" class="text-gray-300 text-sm line-clamp-3"></p>
+            </div>
+            
+            <!-- Add Button -->
+            <button id="addAnimeBtn" class="red-button w-full py-2">
+                <i class="fas fa-plus mr-2"></i> Adicionar
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- Firebase Services -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
