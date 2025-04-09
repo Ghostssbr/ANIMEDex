@@ -13,28 +13,30 @@ class ProjectStorage {
     }
 
     async createGitHubRepo(projectName, token) {
-        const response = await fetch('https://api.github.com/user/repos', {
+    // Substitua a chamada direta por uma API route do Next.js/Vercel
+    try {
+        const response = await fetch('create-repo', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
-                'Accept': 'application/vnd.github.v3+json'
             },
             body: JSON.stringify({
-                name: projectName.toLowerCase().replace(/ /g, '-'),
-                private: true,
-                auto_init: true,
-                description: 'Repositório criado automaticamente pelo AnimeDB'
+                projectName: projectName.toLowerCase().replace(/ /g, '-'),
+                token: token
             })
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`Erro GitHub: ${errorData.message}`);
+            throw new Error(errorData.message || 'Erro ao criar repositório');
         }
 
         return await response.json();
+    } catch (error) {
+        console.error('Erro na criação do repositório:', error);
+        throw new Error('Falha na comunicação com o servidor. Tente novamente.');
     }
+}
 
     async addProject(projectData) {
         try {
@@ -186,27 +188,35 @@ class ProjectUI {
     }
 
     async createProject(e) {
-        e.preventDefault();
-        
-        if (!this.elements.agreeTerms.checked) {
-            alert('Você deve aceitar os termos de serviço!');
-            return;
-        }
-
-        const projectData = {
-            name: this.elements.projectName.value.trim(),
-            description: this.elements.projectDescription.value.trim(),
-            githubToken: this.elements.githubToken.value
-        };
-
-        try {
-            await this.storage.addProject(projectData);
-            this.hideModal();
-            this.renderProjects();
-        } catch (error) {
-            alert(`Erro ao criar projeto: ${error.message}`);
-        }
+    e.preventDefault();
+    
+    if (!this.elements.agreeTerms.checked) {
+        alert('Você deve aceitar os termos de serviço!');
+        return;
     }
+
+    // Mostrar loading
+    this.elements.createBtn.disabled = true;
+    this.elements.createBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Criando...';
+
+    const projectData = {
+        name: this.elements.projectName.value.trim(),
+        description: this.elements.projectDescription.value.trim(),
+        githubToken: this.elements.githubToken.value
+    };
+
+    try {
+        await this.storage.addProject(projectData);
+        this.hideModal();
+        this.renderProjects();
+    } catch (error) {
+        alert(`Erro ao criar projeto: ${error.message}`);
+    } finally {
+        // Restaurar botão
+        this.elements.createBtn.disabled = false;
+        this.elements.createBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Criar Projeto';
+    }
+}
 
     renderProjects() {
         this.elements.projectsList.innerHTML = '';
